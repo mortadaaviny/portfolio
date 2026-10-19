@@ -155,6 +155,7 @@ html[lang="ar"] .meta h3{letter-spacing:0}
 @keyframes wipdot{0%,100%{opacity:1}50%{opacity:.25}}
 .wipcard .wt{position:absolute;left:0;right:0;bottom:0;padding:clamp(22px,4vw,54px) max(var(--gutter),22px) clamp(28px,5vw,56px);max-width:min(80ch,78%)}
 .wipcard .wt h3{margin:0;font-weight:800;letter-spacing:var(--track);line-height:1.04;font-size:clamp(1.7rem,5vw,3.4rem);text-wrap:balance}
+.wipcard .wt p{margin:10px 0 0;color:rgba(239,231,220,.86);font-size:clamp(.92rem,1.7vw,1.12rem);max-width:58ch;line-height:1.5;text-wrap:pretty}
 .wipdots{display:flex;gap:8px;justify-content:center;margin-top:16px}
 .wipdots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer;transition:background .25s,width .25s}
 .wipdots button[aria-current="true"]{background:var(--ember);width:22px;border-radius:5px}
@@ -274,19 +275,6 @@ html[dir="rtl"] .hero-copy .cta{justify-content:flex-end}
   </div>
 </section>
 
-<section class="sec wip" id="wip" hidden>
-  <div class="wrap">
-    <div class="lib-head reveal">
-      <div>
-        <h2 data-i18n="wip_h">Currently working on</h2>
-        <p class="lede" data-i18n="wip_p">A look at what's on my desk right now, before it reaches the library.</p>
-      </div>
-    </div>
-    <div class="wiprow" id="wipRow"></div>
-    <div class="wipdots" id="wipDots"></div>
-  </div>
-</section>
-
 <section class="sec" id="work">
   <div class="wrap">
     <div class="lib-head reveal">
@@ -333,6 +321,19 @@ html[dir="rtl"] .hero-copy .cta{justify-content:flex-end}
       <p class="big" data-i18n="about_p1">A story can reach me as a script, a sketch or a single sentence. I shape it with motion graphics, AI, voice and the cut until it feels alive.</p>
       <ul class="skills" id="skills"></ul>
     </div>
+  </div>
+</section>
+
+<section class="sec wip" id="wip" hidden>
+  <div class="wrap">
+    <div class="lib-head reveal">
+      <div>
+        <h2 data-i18n="wip_h">Currently working on</h2>
+        <p class="lede" data-i18n="wip_p">A look at what's on my desk right now, before it reaches the library.</p>
+      </div>
+    </div>
+    <div class="wiprow" id="wipRow"></div>
+    <div class="wipdots" id="wipDots"></div>
   </div>
 </section>
 
@@ -787,8 +788,14 @@ var DEFAULTS = {
  "inprogress": [
   {
    "id": "w1",
-   "en": "Untitled short film",
-   "ar": "فيلم قصير بلا عنوان",
+   "en": [
+    "Untitled short film",
+    "A quick look at the edit before it's finished."
+   ],
+   "ar": [
+    "فيلم قصير بلا عنوان",
+    "لمحة سريعة عن المونتاج قبل اكتماله."
+   ],
    "thumb": ""
   }
  ]
@@ -808,7 +815,7 @@ function normalize(C){
   if(!Array.isArray(C.projects)) C.projects=clone(D.projects);
   C.projects.forEach(function(p,i){ p.id=p.id||("p"+i); p.en=p.en||["",""]; p.ar=p.ar||["",""]; p.cat=D.cats[p.cat]?p.cat:"motion"; p.url=p.url||""; p.thumb=p.thumb||""; p.dur=p.dur||""; });
   if(!Array.isArray(C.inprogress)) C.inprogress=clone(D.inprogress||[]);
-  C.inprogress.forEach(function(w,i){ w.id=w.id||("w"+i); w.en=w.en||""; w.ar=w.ar||""; w.thumb=w.thumb||""; });
+  C.inprogress.forEach(function(w,i){ w.id=w.id||("w"+i); w.en=w.en||["",""]; w.ar=w.ar||["",""]; w.thumb=w.thumb||""; });
   return C;
 }
 function strip(C){ var o=clone(C); delete o.updated; return JSON.stringify(o); }
@@ -920,7 +927,7 @@ function drawWip(){
   if(!WIP.length) return;
   row.innerHTML=""; if(dots) dots.innerHTML="";
   WIP.forEach(function(w,i){
-    var title=(lang==="ar"?w.ar:w.en)||w.en||w.ar||"";
+    var tl=L(w)||[], title=tl[0]||w.en[0]||w.ar[0]||"", desc=tl[1]||"";
     var card=document.createElement("div"); card.className="wipcard"; card.style.animationDelay=(i*.08)+"s";
     var media=document.createElement("div"); media.className="wmedia";
     if(w.thumb){ var img=document.createElement("img"); img.alt=""; img.src=w.thumb; media.appendChild(img); }
@@ -928,7 +935,9 @@ function drawWip(){
     card.appendChild(media);
     var shade=document.createElement("div"); shade.className="wshade"; card.appendChild(shade);
     var tag=document.createElement("span"); tag.className="wtag mono"; tag.textContent=T[lang].wip_tag||"In progress"; card.appendChild(tag);
-    var t=document.createElement("div"); t.className="wt"; var h3=document.createElement("h3"); h3.textContent=title; t.appendChild(h3); card.appendChild(t);
+    var t=document.createElement("div"); t.className="wt"; var h3=document.createElement("h3"); h3.textContent=title; t.appendChild(h3);
+    if(desc){ var p=document.createElement("p"); p.textContent=desc; t.appendChild(p); }
+    card.appendChild(t);
     row.appendChild(card);
   });
   if(dots && WIP.length>1){
@@ -1154,7 +1163,7 @@ function vWip(){
   if(!S.inprogress.length) return h+'<div class="empty">Nothing in progress right now. Add a project you\'re currently working on.</div>';
   h+='<div class="plist">';
   S.inprogress.forEach(function(w,i){
-    h+='<div class="prow"><canvas width="256" height="144" data-wi="'+i+'"></canvas><div><div class="t">'+esc(w.en||w.ar||"Untitled")+'</div></div>'
+    h+='<div class="prow"><canvas width="256" height="144" data-wi="'+i+'"></canvas><div><div class="t">'+esc(w.en[0]||w.ar[0]||"Untitled")+'</div></div>'
       +'<div class="acts"><button class="btn sm" type="button" data-act="wipedit" data-id="'+w.id+'">Edit</button>'
       +'<button class="btn sm pri" type="button" data-act="wippromote" data-id="'+w.id+'">Move to library</button>'
       +'<button class="btn sm danger'+(sureDel===w.id?' sure':'')+'" type="button" data-act="wipdel" data-id="'+w.id+'">'+(sureDel===w.id?'Confirm delete':'Delete')+'</button></div></div>';
@@ -1164,7 +1173,8 @@ function vWip(){
 function vWipEdit(i){
   var w=S.inprogress[i], b="inprogress."+i;
   return '<div class="row sp"><div><h2>Edit</h2><p class="sub">Changes save in this browser as you type.</p></div><button class="btn" type="button" data-act="wipback">← Back to list</button></div>'
-   +'<div class="card"><div class="grid2">'+input(b+".en","Title (English)")+input(b+".ar","Title (Arabic)",{rtl:1})+'</div>'
+   +'<div class="card"><div class="grid2">'+input(b+".en.0","Title (English)")+input(b+".ar.0","Title (Arabic)",{rtl:1})+'</div>'
+   +'<div class="grid2">'+input(b+".en.1","Short description (English)",{area:1})+input(b+".ar.1","Short description (Arabic)",{area:1,rtl:1})+'</div>'
    +'<div class="field"><label>Cover image</label><div class="thumbbox"><canvas width="480" height="270" id="wipEditThumb"></canvas><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Upload image<input type="file" accept="image/*" data-up="wipthumb" data-id="'+w.id+'" hidden></label>'+(w.thumb?'<button class="btn sm" type="button" data-act="wipthumbclear" data-id="'+w.id+'">Remove</button>':'')+'</div></div><p class="hint">Shown as the card\'s cover on the site. Without one, a generated cover is used.</p></div></div>';
 }
 function vText(){
@@ -1304,7 +1314,7 @@ $("#main").addEventListener("click",function(e){
   else if(a==="del"){ if(sureDel===id){ S.projects.splice(ix(),1); sureDel=null; changed(); } else { sureDel=id; setTimeout(function(){ if(sureDel===id){ sureDel=null; if(tab==="projects"&&editId===null) render(); } },3500); } render(); }
   else if(a==="up"||a==="down"){ var j=ix(), t=a==="up"?j-1:j+1; if(t>=0&&t<S.projects.length){ var m=S.projects[j]; S.projects[j]=S.projects[t]; S.projects[t]=m; changed(); render(); } }
   else if(a==="thumbclear"){ S.projects[ix()].thumb=""; changed(); render(); }
-  else if(a==="wipadd"){ var w={id:"w"+Date.now(),en:"New project",ar:"مشروع جديد",thumb:""}; S.inprogress.unshift(w); wipEdit=w.id; changed(); render(); host.scrollTo(0,0); }
+  else if(a==="wipadd"){ var w={id:"w"+Date.now(),en:["New project",""],ar:["مشروع جديد",""],thumb:""}; S.inprogress.unshift(w); wipEdit=w.id; changed(); render(); host.scrollTo(0,0); }
   else if(a==="wipedit"){ wipEdit=id; render(); host.scrollTo(0,0); }
   else if(a==="wipback"){ wipEdit=null; render(); }
   else if(a==="wipthumbclear"){ var wf=S.inprogress.find(function(w){return w.id===id;}); if(wf) wf.thumb=""; changed(); render(); }
@@ -1312,7 +1322,7 @@ $("#main").addEventListener("click",function(e){
   else if(a==="wippromote"){
     var wi=S.inprogress.findIndex(function(w){return w.id===id;}); if(wi<0) return;
     var w=S.inprogress[wi];
-    var p={id:"p"+Date.now(),cat:"motion",sample:false,dur:"",url:"",thumb:w.thumb||"",en:[w.en||w.ar||"New project",""],ar:[w.ar||w.en||"مشروع جديد",""]};
+    var p={id:"p"+Date.now(),cat:"motion",sample:false,dur:"",url:"",thumb:w.thumb||"",en:[w.en[0]||w.ar[0]||"New project",w.en[1]||""],ar:[w.ar[0]||w.en[0]||"مشروع جديد",w.ar[1]||""]};
     S.projects.unshift(p); S.inprogress.splice(wi,1);
     tab="projects"; editId=p.id; wipEdit=null; sureDel=null; changed(); render(); host.scrollTo(0,0);
     toast("Moved to the library. Pick a category, add the link, then Save.","ok");

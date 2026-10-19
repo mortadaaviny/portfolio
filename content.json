@@ -406,8 +406,14 @@
  "inprogress": [
   {
    "id": "w1",
-   "en": "Untitled short film",
-   "ar": "فيلم قصير بلا عنوان",
+   "en": [
+    "Untitled short film",
+    "A quick look at the edit before it's finished."
+   ],
+   "ar": [
+    "فيلم قصير بلا عنوان",
+    "لمحة سريعة عن المونتاج قبل اكتماله."
+   ],
    "thumb": ""
   }
  ]
