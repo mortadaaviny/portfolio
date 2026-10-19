@@ -705,7 +705,7 @@ function vContact(){
   return h+'<button class="btn sm" type="button" data-act="addsoc">+ Add link</button></div>';
 }
 function vNotice(){
-  if(!meta.server) return '<div class="card" style="border:2px solid var(--bad);margin-bottom:22px;padding:20px"><strong style="font-size:1.15rem">Save is off on this copy of the site</strong><p style="margin:8px 0 0">Changes you make here are only a preview on this screen. Visitors will not see them.</p><p class="hint" style="margin:8px 0 0">Why: this copy was uploaded by drag and drop, and Netlify does not run the save service for drag-and-drop uploads. Fix: in your site folder, double-click <strong>Deploy to Netlify</strong> once (README.txt has the steps). After that, Save updates the site for everyone.</p></div>';
+  if(!meta.server) return '<div class="card" style="border:2px solid var(--bad);margin-bottom:22px;padding:20px"><strong style="font-size:1.15rem">Save is off on this copy of the site</strong><p style="margin:8px 0 0">Changes you make here are only a preview on this screen. Visitors will not see them.</p><p class="hint" style="margin:8px 0 0">This page could not reach its save service'+(meta.why?' ('+esc(meta.why)+')':'')+'. That usually means the deploy step was not run or did not finish, or the save service failed to start. Open README.txt in your site folder and follow the deploy steps for the host you are using (Wasmer or Netlify), then reload this page.</p></div>';
   if(meta.note) return '<div class="card" style="border-color:var(--ember);margin-bottom:22px"><strong>One setup step is missing.</strong><p class="hint" style="margin:6px 0 0">'+esc(meta.note)+'</p></div>';
   return '';
 }
