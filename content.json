@@ -336,7 +336,10 @@
      "Idea to delivery",
      "Direction"
     ]
-   ]
+   ],
+   "wip_h": "Currently working on",
+   "wip_p": "A look at what's on my desk right now, before it reaches the library.",
+   "wip_tag": "In progress"
   },
   "ar": {
    "brand": "خليل سمعور",
@@ -388,7 +391,10 @@
      "من الفكرة إلى التسليم",
      "إخراج"
     ]
-   ]
+   ],
+   "wip_h": "قيد العمل الآن",
+   "wip_p": "لمحة عما أعمل عليه حالياً، قبل أن ينضم إلى المكتبة.",
+   "wip_tag": "قيد العمل"
   }
  },
  "images": {
@@ -396,5 +402,13 @@
   "about": "images/about.jpg",
   "contact": "images/contact.jpg"
  },
- "updated": 0
+ "updated": 0,
+ "inprogress": [
+  {
+   "id": "w1",
+   "en": "Untitled short film",
+   "ar": "فيلم قصير بلا عنوان",
+   "thumb": ""
+  }
+ ]
 }

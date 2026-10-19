@@ -138,6 +138,29 @@ html[dir="rtl"] .scrub{inset:auto 0 0 auto}
 html[lang="ar"] .meta h3{letter-spacing:0}
 .meta .mono{color:var(--mute);text-align:end}
 
+/* currently working on — full-bleed, Netflix-banner style */
+.wip{padding-block:clamp(36px,5vw,64px) clamp(44px,6vw,80px)}
+.wip .wrap{margin-bottom:18px}
+.wiprow{display:flex;width:100vw;margin-inline-start:calc(50% - 50vw);overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none}
+.wiprow::-webkit-scrollbar{display:none}
+.wipcard{position:relative;flex:0 0 100%;width:100vw;aspect-ratio:16/10;max-height:min(74vh,720px);min-height:300px;overflow:hidden;background:var(--bg-2);scroll-snap-align:start;animation:rise .7s cubic-bezier(.2,.7,.2,1) backwards}
+@media (min-width:720px){.wipcard{aspect-ratio:21/9}}
+.wipcard .wmedia{position:absolute;inset:0;overflow:hidden}
+.wipcard img,.wipcard canvas{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.03);animation:wipdrift 16s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){.wipcard img,.wipcard canvas{animation:none}}
+@keyframes wipdrift{from{transform:scale(1.03)}to{transform:scale(1.11)}}
+.wipcard .wshade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,4,3,.95) 0%,rgba(5,4,3,.55) 32%,rgba(5,4,3,.08) 62%,rgba(5,4,3,0) 100%),linear-gradient(90deg,rgba(5,4,3,.5) 0%,rgba(5,4,3,0) 60%)}
+.wipcard .wtag{position:absolute;top:max(var(--gutter),22px);inset-inline-start:max(var(--gutter),22px);display:inline-flex;align-items:center;gap:7px;padding:6px 14px 6px 11px;border-radius:999px;background:var(--ember);color:#150a02;font-family:var(--f-mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;font-weight:700}
+.wipcard .wtag::before{content:"";width:6px;height:6px;border-radius:50%;background:#150a02;animation:wipdot 1.6s ease-in-out infinite}
+@keyframes wipdot{0%,100%{opacity:1}50%{opacity:.25}}
+.wipcard .wt{position:absolute;left:0;right:0;bottom:0;padding:clamp(22px,4vw,54px) max(var(--gutter),22px) clamp(28px,5vw,56px);max-width:min(80ch,78%)}
+.wipcard .wt h3{margin:0;font-weight:800;letter-spacing:var(--track);line-height:1.04;font-size:clamp(1.7rem,5vw,3.4rem);text-wrap:balance}
+.wipdots{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.wipdots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--line);cursor:pointer;transition:background .25s,width .25s}
+.wipdots button[aria-current="true"]{background:var(--ember);width:22px;border-radius:5px}
+@media (hover:hover){.wipcard:hover img,.wipcard:hover canvas{animation-play-state:paused}}
+html[dir="rtl"] .wipcard .wt{text-align:right}
+
 /* modal */
 .ov{position:fixed;inset:0;z-index:60;background:rgba(5,4,3,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow-y:auto;
   padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;place-items:center}
@@ -251,6 +274,19 @@ html[dir="rtl"] .hero-copy .cta{justify-content:flex-end}
   </div>
 </section>
 
+<section class="sec wip" id="wip" hidden>
+  <div class="wrap">
+    <div class="lib-head reveal">
+      <div>
+        <h2 data-i18n="wip_h">Currently working on</h2>
+        <p class="lede" data-i18n="wip_p">A look at what's on my desk right now, before it reaches the library.</p>
+      </div>
+    </div>
+    <div class="wiprow" id="wipRow"></div>
+    <div class="wipdots" id="wipDots"></div>
+  </div>
+</section>
+
 <section class="sec" id="work">
   <div class="wrap">
     <div class="lib-head reveal">
@@ -343,7 +379,420 @@ html[dir="rtl"] .hero-copy .cta{justify-content:flex-end}
 
 <script>
 /* ---------- shared by the site and the admin ---------- */
-var DEFAULTS = {"site": {"socials": [{"name": "WhatsApp", "url": ""}, {"name": "LinkedIn", "url": ""}]}, "projects": [{"cat": "motion", "sample": true, "dur": "00:42", "url": "", "en": ["Kinetic Type Reel", "Typography that moves with the voice, built frame by frame."], "ar": ["ريل الخط المتحرك", "خطوط تتحرك مع الصوت، تُبنى إطارًا بعد إطار."], "id": "p1", "thumb": ""}, {"cat": "ai", "sample": true, "dur": "01:10", "url": "", "en": ["Dream Sequence", "A short film built entirely from generated imagery."], "ar": ["مشهد حلم", "فيلم قصير مبني بالكامل من صور مولّدة."], "id": "p2", "thumb": ""}, {"cat": "aimotion", "sample": true, "dur": "00:30", "url": "", "en": ["Hybrid Commercial", "Generated shots, animated graphics and a tight edit in one ad."], "ar": ["إعلان هجين", "لقطات مولّدة ورسوم متحركة ومونتاج محكم في إعلان واحد."], "id": "p3", "thumb": ""}, {"cat": "creative", "sample": true, "dur": "03:05", "url": "", "en": ["Story From Zero", "Idea, script, voiceover, AI and edit, all in one piece."], "ar": ["قصة من الصفر", "فكرة ونص وتعليق صوتي وذكاء اصطناعي ومونتاج في عمل واحد."], "id": "p4", "thumb": ""}, {"cat": "motion", "sample": true, "dur": "00:58", "url": "", "en": ["Brand Launch Sting", "A short animated opener for a new identity."], "ar": ["مقدمة إطلاق علامة", "مقدمة متحركة قصيرة لهوية جديدة."], "id": "p5", "thumb": ""}, {"cat": "ai", "sample": true, "dur": "00:48", "url": "", "en": ["Faces of Memory", "Portraits that blur between remembered and imagined."], "ar": ["وجوه الذاكرة", "وجوه تتأرجح بين المتذكَّر والمتخيَّل."], "id": "p6", "thumb": ""}, {"cat": "aimotion", "sample": true, "dur": "01:02", "url": "", "en": ["Living Poster", "A still image that breathes, with motion layered on top."], "ar": ["ملصق حي", "صورة ثابتة تتنفس مع طبقات من الحركة."], "id": "p7", "thumb": ""}, {"cat": "creative", "sample": true, "dur": "02:20", "url": "", "en": ["Voice of the Place", "A narrated portrait of a place and the people who keep it."], "ar": ["صوت المكان", "بورتريه مروي لمكان والناس الذين يحفظونه."], "id": "p8", "thumb": ""}, {"cat": "motion", "sample": true, "dur": "00:36", "url": "", "en": ["Data in Motion", "Numbers turned into something you can feel."], "ar": ["بيانات تتحرك", "أرقام تتحول إلى شيء يمكن الإحساس به."], "id": "p9", "thumb": ""}, {"cat": "ai", "sample": true, "dur": "01:25", "url": "", "en": ["City That Never Was", "An imagined skyline explored in one slow move."], "ar": ["مدينة لم توجد", "أفق متخيَّل نستكشفه بحركة بطيئة واحدة."], "id": "p10", "thumb": ""}, {"cat": "aimotion", "sample": true, "dur": "00:50", "url": "", "en": ["Animated Chronicle", "A timeline told with generated scenes and clean motion."], "ar": ["حكاية متحركة", "خط زمني يُروى بمشاهد مولّدة وحركة نظيفة."], "id": "p11", "thumb": ""}, {"cat": "creative", "sample": true, "dur": "04:10", "url": "", "en": ["Letters Never Sent", "Written, voiced, generated and cut from start to finish."], "ar": ["رسائل لم تُرسل", "كُتبت وسُجّلت وولّدت وقُطعت من البداية إلى النهاية."], "id": "p12", "thumb": ""}], "cats": {"motion": {"en": "Motion Graphics", "ar": "موشن غرافيك"}, "ai": {"en": "AI Pure", "ar": "ذكاء اصطناعي خالص"}, "aimotion": {"en": "AI + Motion & Editing", "ar": "ذكاء اصطناعي مع موشن ومونتاج"}, "creative": {"en": "Creative Direction", "ar": "إخراج إبداعي"}}, "phases": [{"s": 0, "e": 24, "en": ["Idea", "Every piece starts with one question: what should the viewer feel in the last second?"], "ar": ["الفكرة", "كل عمل يبدأ بسؤال واحد: ماذا يجب أن يشعر المشاهد في الثانية الأخيرة؟"]}, {"s": 16, "e": 42, "en": ["Script", "I write the words and the shape of the story, then cut whatever does not earn its place."], "ar": ["النص", "أكتب الكلمات وبنية القصة، ثم أحذف كل ما لا يستحق مكانه."]}, {"s": 36, "e": 62, "en": ["Voiceover", "The voice sets the rhythm. I record or direct it before any shot is final."], "ar": ["التعليق الصوتي", "الصوت يضبط الإيقاع. أسجله أو أخرجه قبل أن يُعتمد أي مشهد."]}, {"s": 46, "e": 80, "en": ["AI", "Images and motion generated and guided to serve the story, never the other way around."], "ar": ["الذكاء الاصطناعي", "صور وحركة أولّدها وأوجّهها لتخدم القصة، لا العكس."]}, {"s": 64, "e": 100, "en": ["Editing", "Timing, sound, colour and motion graphics come together. This is where the soul gets in."], "ar": ["المونتاج", "التوقيت والصوت واللون والموشن غرافيك تجتمع هنا. هنا تدخل الروح."]}], "text": {"en": {"brand": "Khalil Samour", "nav_work": "Work", "nav_process": "Process", "nav_about": "About", "nav_contact": "Contact", "hero_eyebrow": "Video editor · Storyteller", "name1": "Khalil", "name2": "Samour", "hero_tag": "I create videos that have *soul*.", "cta1": "See the work", "cta2": "Let's talk", "work_h": "Library", "work_p": "Four ways of telling a story. Pick one, or watch them all.", "all": "All", "sample": "Sample", "watch": "Watch", "soon": "Video link goes here", "close": "Close", "proc_eyebrow": "Creative direction", "proc_h": "From a blank page to the final cut.", "proc_p": "Some projects are mine from the first idea to the last frame. Move along the timeline to see each track at work.", "about_eyebrow": "About", "about_h": "I edit to tell stories.", "about_p1": "A story can reach me as a script, a sketch or a single sentence. I shape it with motion graphics, AI, voice and the cut until it feels alive.", "contact_eyebrow": "Contact", "contact_h": "Let's make something that feels alive.", "copy": "Copy", "copied": "Copied", "foot": "© 2026 Khalil Samour", "top": "Back to top", "langBtn": "العربية", "tlLabel": "Project timeline", "skills": [["Motion graphics", "Animation"], ["Pure AI films", "Generation"], ["AI with motion and editing", "Hybrid"], ["Idea to delivery", "Direction"]]}, "ar": {"brand": "خليل سمعور", "nav_work": "الأعمال", "nav_process": "العملية", "nav_about": "نبذة", "nav_contact": "تواصل", "hero_eyebrow": "محرر فيديو · راوي قصص", "name1": "خليل", "name2": "سمعور", "hero_tag": "أصنع فيديوهات لها *روح*.", "cta1": "شاهد الأعمال", "cta2": "لنتحدث", "work_h": "المكتبة", "work_p": "أربع طرق لرواية القصة. اختر واحدة أو شاهدها كلها.", "all": "الكل", "sample": "نموذج", "watch": "شاهد", "soon": "رابط الفيديو سيوضع هنا", "close": "إغلاق", "proc_eyebrow": "الإخراج الإبداعي", "proc_h": "من الصفحة البيضاء إلى المونتاج النهائي.", "proc_p": "بعض المشاريع أصنعها من الفكرة الأولى حتى الإطار الأخير. حرّك المؤشر على الخط الزمني لترى كل مسار وهو يعمل.", "about_eyebrow": "نبذة", "about_h": "أُحرّر لأروي القصص.", "about_p1": "قد تصلني القصة كنص أو رسم أو جملة واحدة. أصوغها بالموشن غرافيك والذكاء الاصطناعي والصوت والمونتاج حتى تنبض بالحياة.", "contact_eyebrow": "تواصل", "contact_h": "لنصنع شيئًا ينبض بالحياة.", "copy": "نسخ", "copied": "تم النسخ", "foot": "© 2026 خليل سمعور", "top": "للأعلى", "langBtn": "English", "tlLabel": "الخط الزمني للمشروع", "skills": [["موشن غرافيك", "رسوم متحركة"], ["أفلام ذكاء اصطناعي خالص", "توليد"], ["ذكاء اصطناعي مع موشن ومونتاج", "مزيج"], ["من الفكرة إلى التسليم", "إخراج"]]}}, "images": {"hero": "images/hero.jpg", "about": "images/about.jpg", "contact": "images/contact.jpg"}, "updated": 0};
+var DEFAULTS = {
+ "site": {
+  "socials": [
+   {
+    "name": "WhatsApp",
+    "url": ""
+   },
+   {
+    "name": "LinkedIn",
+    "url": ""
+   }
+  ]
+ },
+ "projects": [
+  {
+   "cat": "motion",
+   "sample": true,
+   "dur": "00:42",
+   "url": "",
+   "en": [
+    "Kinetic Type Reel",
+    "Typography that moves with the voice, built frame by frame."
+   ],
+   "ar": [
+    "ريل الخط المتحرك",
+    "خطوط تتحرك مع الصوت، تُبنى إطارًا بعد إطار."
+   ],
+   "id": "p1",
+   "thumb": ""
+  },
+  {
+   "cat": "ai",
+   "sample": true,
+   "dur": "01:10",
+   "url": "",
+   "en": [
+    "Dream Sequence",
+    "A short film built entirely from generated imagery."
+   ],
+   "ar": [
+    "مشهد حلم",
+    "فيلم قصير مبني بالكامل من صور مولّدة."
+   ],
+   "id": "p2",
+   "thumb": ""
+  },
+  {
+   "cat": "aimotion",
+   "sample": true,
+   "dur": "00:30",
+   "url": "",
+   "en": [
+    "Hybrid Commercial",
+    "Generated shots, animated graphics and a tight edit in one ad."
+   ],
+   "ar": [
+    "إعلان هجين",
+    "لقطات مولّدة ورسوم متحركة ومونتاج محكم في إعلان واحد."
+   ],
+   "id": "p3",
+   "thumb": ""
+  },
+  {
+   "cat": "creative",
+   "sample": true,
+   "dur": "03:05",
+   "url": "",
+   "en": [
+    "Story From Zero",
+    "Idea, script, voiceover, AI and edit, all in one piece."
+   ],
+   "ar": [
+    "قصة من الصفر",
+    "فكرة ونص وتعليق صوتي وذكاء اصطناعي ومونتاج في عمل واحد."
+   ],
+   "id": "p4",
+   "thumb": ""
+  },
+  {
+   "cat": "motion",
+   "sample": true,
+   "dur": "00:58",
+   "url": "",
+   "en": [
+    "Brand Launch Sting",
+    "A short animated opener for a new identity."
+   ],
+   "ar": [
+    "مقدمة إطلاق علامة",
+    "مقدمة متحركة قصيرة لهوية جديدة."
+   ],
+   "id": "p5",
+   "thumb": ""
+  },
+  {
+   "cat": "ai",
+   "sample": true,
+   "dur": "00:48",
+   "url": "",
+   "en": [
+    "Faces of Memory",
+    "Portraits that blur between remembered and imagined."
+   ],
+   "ar": [
+    "وجوه الذاكرة",
+    "وجوه تتأرجح بين المتذكَّر والمتخيَّل."
+   ],
+   "id": "p6",
+   "thumb": ""
+  },
+  {
+   "cat": "aimotion",
+   "sample": true,
+   "dur": "01:02",
+   "url": "",
+   "en": [
+    "Living Poster",
+    "A still image that breathes, with motion layered on top."
+   ],
+   "ar": [
+    "ملصق حي",
+    "صورة ثابتة تتنفس مع طبقات من الحركة."
+   ],
+   "id": "p7",
+   "thumb": ""
+  },
+  {
+   "cat": "creative",
+   "sample": true,
+   "dur": "02:20",
+   "url": "",
+   "en": [
+    "Voice of the Place",
+    "A narrated portrait of a place and the people who keep it."
+   ],
+   "ar": [
+    "صوت المكان",
+    "بورتريه مروي لمكان والناس الذين يحفظونه."
+   ],
+   "id": "p8",
+   "thumb": ""
+  },
+  {
+   "cat": "motion",
+   "sample": true,
+   "dur": "00:36",
+   "url": "",
+   "en": [
+    "Data in Motion",
+    "Numbers turned into something you can feel."
+   ],
+   "ar": [
+    "بيانات تتحرك",
+    "أرقام تتحول إلى شيء يمكن الإحساس به."
+   ],
+   "id": "p9",
+   "thumb": ""
+  },
+  {
+   "cat": "ai",
+   "sample": true,
+   "dur": "01:25",
+   "url": "",
+   "en": [
+    "City That Never Was",
+    "An imagined skyline explored in one slow move."
+   ],
+   "ar": [
+    "مدينة لم توجد",
+    "أفق متخيَّل نستكشفه بحركة بطيئة واحدة."
+   ],
+   "id": "p10",
+   "thumb": ""
+  },
+  {
+   "cat": "aimotion",
+   "sample": true,
+   "dur": "00:50",
+   "url": "",
+   "en": [
+    "Animated Chronicle",
+    "A timeline told with generated scenes and clean motion."
+   ],
+   "ar": [
+    "حكاية متحركة",
+    "خط زمني يُروى بمشاهد مولّدة وحركة نظيفة."
+   ],
+   "id": "p11",
+   "thumb": ""
+  },
+  {
+   "cat": "creative",
+   "sample": true,
+   "dur": "04:10",
+   "url": "",
+   "en": [
+    "Letters Never Sent",
+    "Written, voiced, generated and cut from start to finish."
+   ],
+   "ar": [
+    "رسائل لم تُرسل",
+    "كُتبت وسُجّلت وولّدت وقُطعت من البداية إلى النهاية."
+   ],
+   "id": "p12",
+   "thumb": ""
+  }
+ ],
+ "cats": {
+  "motion": {
+   "en": "Motion Graphics",
+   "ar": "موشن غرافيك"
+  },
+  "ai": {
+   "en": "AI Pure",
+   "ar": "ذكاء اصطناعي خالص"
+  },
+  "aimotion": {
+   "en": "AI + Motion & Editing",
+   "ar": "ذكاء اصطناعي مع موشن ومونتاج"
+  },
+  "creative": {
+   "en": "Creative Direction",
+   "ar": "إخراج إبداعي"
+  }
+ },
+ "phases": [
+  {
+   "s": 0,
+   "e": 24,
+   "en": [
+    "Idea",
+    "Every piece starts with one question: what should the viewer feel in the last second?"
+   ],
+   "ar": [
+    "الفكرة",
+    "كل عمل يبدأ بسؤال واحد: ماذا يجب أن يشعر المشاهد في الثانية الأخيرة؟"
+   ]
+  },
+  {
+   "s": 16,
+   "e": 42,
+   "en": [
+    "Script",
+    "I write the words and the shape of the story, then cut whatever does not earn its place."
+   ],
+   "ar": [
+    "النص",
+    "أكتب الكلمات وبنية القصة، ثم أحذف كل ما لا يستحق مكانه."
+   ]
+  },
+  {
+   "s": 36,
+   "e": 62,
+   "en": [
+    "Voiceover",
+    "The voice sets the rhythm. I record or direct it before any shot is final."
+   ],
+   "ar": [
+    "التعليق الصوتي",
+    "الصوت يضبط الإيقاع. أسجله أو أخرجه قبل أن يُعتمد أي مشهد."
+   ]
+  },
+  {
+   "s": 46,
+   "e": 80,
+   "en": [
+    "AI",
+    "Images and motion generated and guided to serve the story, never the other way around."
+   ],
+   "ar": [
+    "الذكاء الاصطناعي",
+    "صور وحركة أولّدها وأوجّهها لتخدم القصة، لا العكس."
+   ]
+  },
+  {
+   "s": 64,
+   "e": 100,
+   "en": [
+    "Editing",
+    "Timing, sound, colour and motion graphics come together. This is where the soul gets in."
+   ],
+   "ar": [
+    "المونتاج",
+    "التوقيت والصوت واللون والموشن غرافيك تجتمع هنا. هنا تدخل الروح."
+   ]
+  }
+ ],
+ "text": {
+  "en": {
+   "brand": "Khalil Samour",
+   "nav_work": "Work",
+   "nav_process": "Process",
+   "nav_about": "About",
+   "nav_contact": "Contact",
+   "hero_eyebrow": "Video editor · Storyteller",
+   "name1": "Khalil",
+   "name2": "Samour",
+   "hero_tag": "I create videos that have *soul*.",
+   "cta1": "See the work",
+   "cta2": "Let's talk",
+   "work_h": "Library",
+   "work_p": "Four ways of telling a story. Pick one, or watch them all.",
+   "all": "All",
+   "sample": "Sample",
+   "watch": "Watch",
+   "soon": "Video link goes here",
+   "close": "Close",
+   "proc_eyebrow": "Creative direction",
+   "proc_h": "From a blank page to the final cut.",
+   "proc_p": "Some projects are mine from the first idea to the last frame. Move along the timeline to see each track at work.",
+   "about_eyebrow": "About",
+   "about_h": "I edit to tell stories.",
+   "about_p1": "A story can reach me as a script, a sketch or a single sentence. I shape it with motion graphics, AI, voice and the cut until it feels alive.",
+   "contact_eyebrow": "Contact",
+   "contact_h": "Let's make something that feels alive.",
+   "copy": "Copy",
+   "copied": "Copied",
+   "foot": "© 2026 Khalil Samour",
+   "top": "Back to top",
+   "langBtn": "العربية",
+   "tlLabel": "Project timeline",
+   "skills": [
+    [
+     "Motion graphics",
+     "Animation"
+    ],
+    [
+     "Pure AI films",
+     "Generation"
+    ],
+    [
+     "AI with motion and editing",
+     "Hybrid"
+    ],
+    [
+     "Idea to delivery",
+     "Direction"
+    ]
+   ],
+   "wip_h": "Currently working on",
+   "wip_p": "A look at what's on my desk right now, before it reaches the library.",
+   "wip_tag": "In progress"
+  },
+  "ar": {
+   "brand": "خليل سمعور",
+   "nav_work": "الأعمال",
+   "nav_process": "العملية",
+   "nav_about": "نبذة",
+   "nav_contact": "تواصل",
+   "hero_eyebrow": "محرر فيديو · راوي قصص",
+   "name1": "خليل",
+   "name2": "سمعور",
+   "hero_tag": "أصنع فيديوهات لها *روح*.",
+   "cta1": "شاهد الأعمال",
+   "cta2": "لنتحدث",
+   "work_h": "المكتبة",
+   "work_p": "أربع طرق لرواية القصة. اختر واحدة أو شاهدها كلها.",
+   "all": "الكل",
+   "sample": "نموذج",
+   "watch": "شاهد",
+   "soon": "رابط الفيديو سيوضع هنا",
+   "close": "إغلاق",
+   "proc_eyebrow": "الإخراج الإبداعي",
+   "proc_h": "من الصفحة البيضاء إلى المونتاج النهائي.",
+   "proc_p": "بعض المشاريع أصنعها من الفكرة الأولى حتى الإطار الأخير. حرّك المؤشر على الخط الزمني لترى كل مسار وهو يعمل.",
+   "about_eyebrow": "نبذة",
+   "about_h": "أُحرّر لأروي القصص.",
+   "about_p1": "قد تصلني القصة كنص أو رسم أو جملة واحدة. أصوغها بالموشن غرافيك والذكاء الاصطناعي والصوت والمونتاج حتى تنبض بالحياة.",
+   "contact_eyebrow": "تواصل",
+   "contact_h": "لنصنع شيئًا ينبض بالحياة.",
+   "copy": "نسخ",
+   "copied": "تم النسخ",
+   "foot": "© 2026 خليل سمعور",
+   "top": "للأعلى",
+   "langBtn": "English",
+   "tlLabel": "الخط الزمني للمشروع",
+   "skills": [
+    [
+     "موشن غرافيك",
+     "رسوم متحركة"
+    ],
+    [
+     "أفلام ذكاء اصطناعي خالص",
+     "توليد"
+    ],
+    [
+     "ذكاء اصطناعي مع موشن ومونتاج",
+     "مزيج"
+    ],
+    [
+     "من الفكرة إلى التسليم",
+     "إخراج"
+    ]
+   ],
+   "wip_h": "قيد العمل الآن",
+   "wip_p": "لمحة عما أعمل عليه حالياً، قبل أن ينضم إلى المكتبة.",
+   "wip_tag": "قيد العمل"
+  }
+ },
+ "images": {
+  "hero": "images/hero.jpg",
+  "about": "images/about.jpg",
+  "contact": "images/contact.jpg"
+ },
+ "updated": 0,
+ "inprogress": [
+  {
+   "id": "w1",
+   "en": "Untitled short film",
+   "ar": "فيلم قصير بلا عنوان",
+   "thumb": ""
+  }
+ ]
+};
 function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 function fmt(s){ return esc(s).replace(/\*([^*]+)\*/g,"<em>$1</em>"); }
 function clone(o){ return JSON.parse(JSON.stringify(o)); }
@@ -358,6 +807,8 @@ function normalize(C){
   if(!Array.isArray(C.phases)||!C.phases.length) C.phases=clone(D.phases);
   if(!Array.isArray(C.projects)) C.projects=clone(D.projects);
   C.projects.forEach(function(p,i){ p.id=p.id||("p"+i); p.en=p.en||["",""]; p.ar=p.ar||["",""]; p.cat=D.cats[p.cat]?p.cat:"motion"; p.url=p.url||""; p.thumb=p.thumb||""; p.dur=p.dur||""; });
+  if(!Array.isArray(C.inprogress)) C.inprogress=clone(D.inprogress||[]);
+  C.inprogress.forEach(function(w,i){ w.id=w.id||("w"+i); w.en=w.en||""; w.ar=w.ar||""; w.thumb=w.thumb||""; });
   return C;
 }
 function strip(C){ var o=clone(C); delete o.updated; return JSON.stringify(o); }
@@ -432,7 +883,7 @@ function thumbArt(cv, p, seed){
   } else art(cv,p.cat,seed);
 }
 
-var C, T, CATS, PHASES, PROJECTS, SITE;
+var C, T, CATS, PHASES, PROJECTS, SITE, WIP;
 var lang = "en", filter = "all", $ = function(s){ return document.querySelector(s); };
 try { var saved = localStorage.getItem("ks-lang"); if (saved === "ar" || saved === "en") lang = saved; } catch(e){}
 function L(o){ return o[lang]; }
@@ -461,6 +912,38 @@ function drawGrid(){
     grid.appendChild(b);
   });
   if(!grid.children.length){ var e=document.createElement("p"); e.className="lede"; e.textContent="—"; grid.appendChild(e); }
+}
+/* ---------- currently working on ---------- */
+function drawWip(){
+  var sec=$("#wip"), row=$("#wipRow"), dots=$("#wipDots"); if(!sec||!row) return;
+  sec.hidden = !WIP.length;
+  if(!WIP.length) return;
+  row.innerHTML=""; if(dots) dots.innerHTML="";
+  WIP.forEach(function(w,i){
+    var title=(lang==="ar"?w.ar:w.en)||w.en||w.ar||"";
+    var card=document.createElement("div"); card.className="wipcard"; card.style.animationDelay=(i*.08)+"s";
+    var media=document.createElement("div"); media.className="wmedia";
+    if(w.thumb){ var img=document.createElement("img"); img.alt=""; img.src=w.thumb; media.appendChild(img); }
+    else { var cv=document.createElement("canvas"); cv.width=1280; cv.height=720; art(cv,"",i+7); media.appendChild(cv); }
+    card.appendChild(media);
+    var shade=document.createElement("div"); shade.className="wshade"; card.appendChild(shade);
+    var tag=document.createElement("span"); tag.className="wtag mono"; tag.textContent=T[lang].wip_tag||"In progress"; card.appendChild(tag);
+    var t=document.createElement("div"); t.className="wt"; var h3=document.createElement("h3"); h3.textContent=title; t.appendChild(h3); card.appendChild(t);
+    row.appendChild(card);
+  });
+  if(dots && WIP.length>1){
+    WIP.forEach(function(_,i){
+      var b=document.createElement("button"); b.type="button"; b.setAttribute("aria-label","Slide "+(i+1)); b.setAttribute("aria-current",String(i===0));
+      b.onclick=function(){ row.children[i].scrollIntoView({behavior:"smooth",inline:"start",block:"nearest"}); };
+      dots.appendChild(b);
+    });
+    var sTimer; row.onscroll=function(){
+      clearTimeout(sTimer); sTimer=setTimeout(function(){
+        var w=row.clientWidth, idx=Math.round(row.scrollLeft/Math.max(1,w));
+        Array.prototype.forEach.call(dots.children,function(b,i){ b.setAttribute("aria-current",String(i===idx)); });
+      },80);
+    };
+  }
 }
 var opener=null, openIdx=-1;
 function youTubeId(u){
@@ -536,7 +1019,7 @@ function applyLang(){
   document.querySelectorAll("[data-i18n-html]").forEach(function(n){ n.innerHTML=fmt(d[n.dataset.i18nHtml]); });
   $("#lang").textContent=d.langBtn; $("#lang").setAttribute("aria-label", lang==="ar"?"Switch to English":"التبديل إلى العربية");
   $("#skills").innerHTML=d.skills.map(function(s){ return "<li><span>"+esc(s[0])+"</span><span class='mono'>"+esc(s[1])+"</span></li>"; }).join("");
-  drawChips(); drawGrid(); paintTimeline(); fillModal();
+  drawChips(); drawGrid(); drawWip(); paintTimeline(); fillModal();
 }
 $("#lang").onclick=function(){ lang=lang==="en"?"ar":"en"; try{localStorage.setItem("ks-lang",lang);}catch(e){} applyLang(); };
 
@@ -545,7 +1028,7 @@ $("#discard").onclick=function(){ clearDraft(); location.reload(); };
 
 var started=false;
 function init(content, isDraft){
-  C=content; T=C.text; CATS=C.cats; PHASES=C.phases; PROJECTS=C.projects; SITE=C.site;
+  C=content; T=C.text; CATS=C.cats; PHASES=C.phases; PROJECTS=C.projects; SITE=C.site; WIP=C.inprogress||[];
   $("#hero-img").src=C.images.hero; $("#about-img").src=C.images.about; $("#contact-img").src=C.images.contact;
   $("#soc").innerHTML=SITE.socials.map(function(s){ var u=safeUrl(s.url); return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(s.name)+'</a>':'<span>'+esc(s.name)+'</span>'; }).join("");
   $("#draftbar").hidden=!isDraft;
@@ -608,8 +1091,8 @@ var ADM_HTML="<style>\n/* Layout concept: a quiet control room. Sticky status ba
 var host=document.getElementById("admov"), root=host.shadowRoot||host.attachShadow({mode:"open"});
 root.innerHTML=ADM_HTML;
 var $=function(s){return root.querySelector(s);};
-var meta={server:false,hasPassword:false}, pw="", authed=false, S=null, pub=null, pubJSON="", base=0, tab="projects", editId=null, sureDel=null, saveTimer=0, storageFull=false;
-var TABS=[["projects","Projects"],["text","Text"],["timeline","Process"],["images","Photos"],["contact","Contact"],["backup","Backup"]];
+var meta={server:false,hasPassword:false}, pw="", authed=false, S=null, pub=null, pubJSON="", base=0, tab="projects", editId=null, wipEdit=null, sureDel=null, saveTimer=0, storageFull=false;
+var TABS=[["projects","Projects"],["wip","Working On"],["text","Text"],["timeline","Process"],["images","Photos"],["contact","Contact"],["backup","Backup"]];
 var GROUPS=[
  ["Header & hero",[["brand","Header name"],["hero_eyebrow","Small label above name"],["name1","First name"],["name2","Last name"],["hero_tag","Tagline (put *stars* around the accent word)"],["cta1","Hero button 1"],["cta2","Hero button 2"]]],
  ["Menu",[["nav_work","Work"],["nav_process","Process"],["nav_about","About"],["nav_contact","Contact"]]],
@@ -664,6 +1147,25 @@ function vProjectEdit(i){
    +input(b+".url","Video link",{type:"url",ph:"https://youtu.be/…",hint:"YouTube, Vimeo, Drive or any page with the video. It opens in a new tab."})
    +'<div class="field"><label>Thumbnail</label><div class="thumbbox"><canvas width="480" height="270" id="editThumb"></canvas><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Upload image<input type="file" accept="image/*" data-up="thumb" data-id="'+p.id+'" hidden></label>'+(p.thumb?'<button class="btn sm" type="button" data-act="thumbclear" data-id="'+p.id+'">Use generated art</button>':'')+'</div></div><p class="hint">Optional. Without one, a generated frame is used.</p></div>'
    +'<label class="chk"><input type="checkbox" data-p="'+b+'.sample" data-t="bool"'+(p.sample?' checked':'')+'> Show the "Sample" badge on this project</label></div>';
+}
+function vWip(){
+  if(wipEdit!==null){ var i=S.inprogress.findIndex(function(w){return w.id===wipEdit;}); if(i<0){ wipEdit=null; return vWip(); } return vWipEdit(i); }
+  var h='<div class="row sp"><div><h2>Currently working on</h2><p class="sub">Shown as cards under the hero on your site. Add a project while you\'re still working on it, then move it to the library once it\'s done.</p></div><button class="btn pri" type="button" data-act="wipadd">+ Add</button></div>';
+  if(!S.inprogress.length) return h+'<div class="empty">Nothing in progress right now. Add a project you\'re currently working on.</div>';
+  h+='<div class="plist">';
+  S.inprogress.forEach(function(w,i){
+    h+='<div class="prow"><canvas width="256" height="144" data-wi="'+i+'"></canvas><div><div class="t">'+esc(w.en||w.ar||"Untitled")+'</div></div>'
+      +'<div class="acts"><button class="btn sm" type="button" data-act="wipedit" data-id="'+w.id+'">Edit</button>'
+      +'<button class="btn sm pri" type="button" data-act="wippromote" data-id="'+w.id+'">Move to library</button>'
+      +'<button class="btn sm danger'+(sureDel===w.id?' sure':'')+'" type="button" data-act="wipdel" data-id="'+w.id+'">'+(sureDel===w.id?'Confirm delete':'Delete')+'</button></div></div>';
+  });
+  return h+'</div>';
+}
+function vWipEdit(i){
+  var w=S.inprogress[i], b="inprogress."+i;
+  return '<div class="row sp"><div><h2>Edit</h2><p class="sub">Changes save in this browser as you type.</p></div><button class="btn" type="button" data-act="wipback">← Back to list</button></div>'
+   +'<div class="card"><div class="grid2">'+input(b+".en","Title (English)")+input(b+".ar","Title (Arabic)",{rtl:1})+'</div>'
+   +'<div class="field"><label>Cover image</label><div class="thumbbox"><canvas width="480" height="270" id="wipEditThumb"></canvas><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Upload image<input type="file" accept="image/*" data-up="wipthumb" data-id="'+w.id+'" hidden></label>'+(w.thumb?'<button class="btn sm" type="button" data-act="wipthumbclear" data-id="'+w.id+'">Remove</button>':'')+'</div></div><p class="hint">Shown as the card\'s cover on the site. Without one, a generated cover is used.</p></div></div>';
 }
 function vText(){
   var h='<h2>Text</h2><p class="sub">Every word on the site, in English and Arabic.</p>';
@@ -721,13 +1223,15 @@ function vBackup(){
    +'<div class="card"><div class="row"><button class="btn" type="button" data-act="download">Download content.json</button><button class="btn" type="button" data-act="copyjson">Copy JSON</button></div><div class="msg" id="dlmsg"></div></div>'
    +'<h3>Restore</h3><div class="card"><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Import content.json<input type="file" accept="application/json,.json" data-up="import" hidden></label><button class="btn sm danger" type="button" data-act="discard"'+(d?'':' disabled')+'>Discard unsaved changes</button></div><p class="hint">Import replaces what you see here with a saved file. Press Save to keep it. Discard goes back to the last saved version.</p><div class="msg" id="rsmsg"></div></div>';
 }
-var VIEWS={projects:vProjects,text:vText,timeline:vTimeline,images:vImages,contact:vContact,backup:vBackup};
+var VIEWS={projects:vProjects,wip:vWip,text:vText,timeline:vTimeline,images:vImages,contact:vContact,backup:vBackup};
 function render(){
   $("#saveBtn").disabled=!authed; $("#saveBtn").textContent=meta.server?"Save":"Save is off";
   $("#tabs").innerHTML=!authed?"":TABS.map(function(t){ return '<button class="tab" role="tab" type="button" data-tab="'+t[0]+'" aria-selected="'+(tab===t[0])+'">'+t[1]+'</button>'; }).join("");
   $("#main").innerHTML=authed?vNotice()+VIEWS[tab]():vLogin();
   $("#main").querySelectorAll("canvas[data-i]").forEach(function(cv){ var i=+cv.dataset.i; thumbArt(cv,S.projects[i],i+1); });
   var et=$("#editThumb"); if(et){ var i=S.projects.findIndex(function(p){return p.id===editId;}); thumbArt(et,S.projects[i],i+1); }
+  $("#main").querySelectorAll("canvas[data-wi]").forEach(function(cv){ var i=+cv.dataset.wi; thumbArt(cv,S.inprogress[i],i+7); });
+  var wet=$("#wipEditThumb"); if(wet){ var i=S.inprogress.findIndex(function(w){return w.id===wipEdit;}); thumbArt(wet,S.inprogress[i],i+7); }
   paintState();
 }
 
@@ -784,9 +1288,10 @@ $("#main").addEventListener("change",function(e){
   var up=el.dataset&&el.dataset.up; if(!up||!el.files||!el.files[0]) return; var f=el.files[0];
   if(up==="import"){ var fr=new FileReader(); fr.onload=function(){ try{ var j=JSON.parse(fr.result); if(!j.projects||!j.text) throw 0; S=normalize(j); changed(); render(); say("rsmsg","Imported. Press Save to keep it.","ok"); }catch(_){ say("rsmsg","That file is not a valid content.json.","err"); } }; fr.readAsText(f); return; }
   if(up==="thumb"){ readImage(f,800,true,function(d){ if(!d) return; S.projects.find(function(p){return p.id===el.dataset.id;}).thumb=d; changed(); render(); }); }
+  if(up==="wipthumb"){ readImage(f,800,true,function(d){ if(!d) return; S.inprogress.find(function(w){return w.id===el.dataset.id;}).thumb=d; changed(); render(); }); }
   if(up==="img"){ var k=el.dataset.k; readImage(f,k==="hero"?1600:1280,false,function(d){ if(!d) return; S.images[k]=d; changed(); render(); }); }
 });
-$("#tabs").addEventListener("click",function(e){ var b=e.target.closest("[data-tab]"); if(!b) return; tab=b.dataset.tab; editId=null; sureDel=null; render(); host.scrollTo(0,0); });
+$("#tabs").addEventListener("click",function(e){ var b=e.target.closest("[data-tab]"); if(!b) return; tab=b.dataset.tab; editId=null; wipEdit=null; sureDel=null; render(); host.scrollTo(0,0); });
 $("#saveBtn").onclick=save;
 $("#closeBtn").onclick=function(){ closeAdmin(); };
 $("#main").addEventListener("keydown",function(e){ if(e.key==="Enter"&&(e.target.id==="pw1"||e.target.id==="pw2")){ var b=$("#main").querySelector("[data-act=login],[data-act=setpw]"); if(b) b.click(); } });
@@ -799,6 +1304,19 @@ $("#main").addEventListener("click",function(e){
   else if(a==="del"){ if(sureDel===id){ S.projects.splice(ix(),1); sureDel=null; changed(); } else { sureDel=id; setTimeout(function(){ if(sureDel===id){ sureDel=null; if(tab==="projects"&&editId===null) render(); } },3500); } render(); }
   else if(a==="up"||a==="down"){ var j=ix(), t=a==="up"?j-1:j+1; if(t>=0&&t<S.projects.length){ var m=S.projects[j]; S.projects[j]=S.projects[t]; S.projects[t]=m; changed(); render(); } }
   else if(a==="thumbclear"){ S.projects[ix()].thumb=""; changed(); render(); }
+  else if(a==="wipadd"){ var w={id:"w"+Date.now(),en:"New project",ar:"مشروع جديد",thumb:""}; S.inprogress.unshift(w); wipEdit=w.id; changed(); render(); host.scrollTo(0,0); }
+  else if(a==="wipedit"){ wipEdit=id; render(); host.scrollTo(0,0); }
+  else if(a==="wipback"){ wipEdit=null; render(); }
+  else if(a==="wipthumbclear"){ var wf=S.inprogress.find(function(w){return w.id===id;}); if(wf) wf.thumb=""; changed(); render(); }
+  else if(a==="wipdel"){ var wix=function(){ return S.inprogress.findIndex(function(w){return w.id===id;}); }; if(sureDel===id){ S.inprogress.splice(wix(),1); sureDel=null; changed(); } else { sureDel=id; setTimeout(function(){ if(sureDel===id){ sureDel=null; if(tab==="wip"&&wipEdit===null) render(); } },3500); } render(); }
+  else if(a==="wippromote"){
+    var wi=S.inprogress.findIndex(function(w){return w.id===id;}); if(wi<0) return;
+    var w=S.inprogress[wi];
+    var p={id:"p"+Date.now(),cat:"motion",sample:false,dur:"",url:"",thumb:w.thumb||"",en:[w.en||w.ar||"New project",""],ar:[w.ar||w.en||"مشروع جديد",""]};
+    S.projects.unshift(p); S.inprogress.splice(wi,1);
+    tab="projects"; editId=p.id; wipEdit=null; sureDel=null; changed(); render(); host.scrollTo(0,0);
+    toast("Moved to the library. Pick a category, add the link, then Save.","ok");
+  }
   else if(a==="addskill"){ S.text.en.skills.push(["",""]); S.text.ar.skills.push(["",""]); changed(); render(); }
   else if(a==="delskill"){ S.text.en.skills.splice(i,1); S.text.ar.skills.splice(i,1); changed(); render(); }
   else if(a==="addphase"){ S.phases.push({s:50,e:100,en:["New track",""],ar:["مسار جديد",""]}); changed(); render(); }
