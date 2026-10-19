@@ -1,0 +1,11 @@
+kind: wasmer.io/App.v0
+name: khalil-portfolio
+package: .
+
+env:
+  PUBLIC_DIR: /public
+  DATA_DIR: /data
+
+volumes:
+  - name: data
+    mount: /data

@@ -1,0 +1,400 @@
+{
+ "site": {
+  "socials": [
+   {
+    "name": "WhatsApp",
+    "url": ""
+   },
+   {
+    "name": "LinkedIn",
+    "url": ""
+   }
+  ]
+ },
+ "projects": [
+  {
+   "cat": "motion",
+   "sample": true,
+   "dur": "00:42",
+   "url": "",
+   "en": [
+    "Kinetic Type Reel",
+    "Typography that moves with the voice, built frame by frame."
+   ],
+   "ar": [
+    "ريل الخط المتحرك",
+    "خطوط تتحرك مع الصوت، تُبنى إطارًا بعد إطار."
+   ],
+   "id": "p1",
+   "thumb": ""
+  },
+  {
+   "cat": "ai",
+   "sample": true,
+   "dur": "01:10",
+   "url": "",
+   "en": [
+    "Dream Sequence",
+    "A short film built entirely from generated imagery."
+   ],
+   "ar": [
+    "مشهد حلم",
+    "فيلم قصير مبني بالكامل من صور مولّدة."
+   ],
+   "id": "p2",
+   "thumb": ""
+  },
+  {
+   "cat": "aimotion",
+   "sample": true,
+   "dur": "00:30",
+   "url": "",
+   "en": [
+    "Hybrid Commercial",
+    "Generated shots, animated graphics and a tight edit in one ad."
+   ],
+   "ar": [
+    "إعلان هجين",
+    "لقطات مولّدة ورسوم متحركة ومونتاج محكم في إعلان واحد."
+   ],
+   "id": "p3",
+   "thumb": ""
+  },
+  {
+   "cat": "creative",
+   "sample": true,
+   "dur": "03:05",
+   "url": "",
+   "en": [
+    "Story From Zero",
+    "Idea, script, voiceover, AI and edit, all in one piece."
+   ],
+   "ar": [
+    "قصة من الصفر",
+    "فكرة ونص وتعليق صوتي وذكاء اصطناعي ومونتاج في عمل واحد."
+   ],
+   "id": "p4",
+   "thumb": ""
+  },
+  {
+   "cat": "motion",
+   "sample": true,
+   "dur": "00:58",
+   "url": "",
+   "en": [
+    "Brand Launch Sting",
+    "A short animated opener for a new identity."
+   ],
+   "ar": [
+    "مقدمة إطلاق علامة",
+    "مقدمة متحركة قصيرة لهوية جديدة."
+   ],
+   "id": "p5",
+   "thumb": ""
+  },
+  {
+   "cat": "ai",
+   "sample": true,
+   "dur": "00:48",
+   "url": "",
+   "en": [
+    "Faces of Memory",
+    "Portraits that blur between remembered and imagined."
+   ],
+   "ar": [
+    "وجوه الذاكرة",
+    "وجوه تتأرجح بين المتذكَّر والمتخيَّل."
+   ],
+   "id": "p6",
+   "thumb": ""
+  },
+  {
+   "cat": "aimotion",
+   "sample": true,
+   "dur": "01:02",
+   "url": "",
+   "en": [
+    "Living Poster",
+    "A still image that breathes, with motion layered on top."
+   ],
+   "ar": [
+    "ملصق حي",
+    "صورة ثابتة تتنفس مع طبقات من الحركة."
+   ],
+   "id": "p7",
+   "thumb": ""
+  },
+  {
+   "cat": "creative",
+   "sample": true,
+   "dur": "02:20",
+   "url": "",
+   "en": [
+    "Voice of the Place",
+    "A narrated portrait of a place and the people who keep it."
+   ],
+   "ar": [
+    "صوت المكان",
+    "بورتريه مروي لمكان والناس الذين يحفظونه."
+   ],
+   "id": "p8",
+   "thumb": ""
+  },
+  {
+   "cat": "motion",
+   "sample": true,
+   "dur": "00:36",
+   "url": "",
+   "en": [
+    "Data in Motion",
+    "Numbers turned into something you can feel."
+   ],
+   "ar": [
+    "بيانات تتحرك",
+    "أرقام تتحول إلى شيء يمكن الإحساس به."
+   ],
+   "id": "p9",
+   "thumb": ""
+  },
+  {
+   "cat": "ai",
+   "sample": true,
+   "dur": "01:25",
+   "url": "",
+   "en": [
+    "City That Never Was",
+    "An imagined skyline explored in one slow move."
+   ],
+   "ar": [
+    "مدينة لم توجد",
+    "أفق متخيَّل نستكشفه بحركة بطيئة واحدة."
+   ],
+   "id": "p10",
+   "thumb": ""
+  },
+  {
+   "cat": "aimotion",
+   "sample": true,
+   "dur": "00:50",
+   "url": "",
+   "en": [
+    "Animated Chronicle",
+    "A timeline told with generated scenes and clean motion."
+   ],
+   "ar": [
+    "حكاية متحركة",
+    "خط زمني يُروى بمشاهد مولّدة وحركة نظيفة."
+   ],
+   "id": "p11",
+   "thumb": ""
+  },
+  {
+   "cat": "creative",
+   "sample": true,
+   "dur": "04:10",
+   "url": "",
+   "en": [
+    "Letters Never Sent",
+    "Written, voiced, generated and cut from start to finish."
+   ],
+   "ar": [
+    "رسائل لم تُرسل",
+    "كُتبت وسُجّلت وولّدت وقُطعت من البداية إلى النهاية."
+   ],
+   "id": "p12",
+   "thumb": ""
+  }
+ ],
+ "cats": {
+  "motion": {
+   "en": "Motion Graphics",
+   "ar": "موشن غرافيك"
+  },
+  "ai": {
+   "en": "AI Pure",
+   "ar": "ذكاء اصطناعي خالص"
+  },
+  "aimotion": {
+   "en": "AI + Motion & Editing",
+   "ar": "ذكاء اصطناعي مع موشن ومونتاج"
+  },
+  "creative": {
+   "en": "Creative Direction",
+   "ar": "إخراج إبداعي"
+  }
+ },
+ "phases": [
+  {
+   "s": 0,
+   "e": 24,
+   "en": [
+    "Idea",
+    "Every piece starts with one question: what should the viewer feel in the last second?"
+   ],
+   "ar": [
+    "الفكرة",
+    "كل عمل يبدأ بسؤال واحد: ماذا يجب أن يشعر المشاهد في الثانية الأخيرة؟"
+   ]
+  },
+  {
+   "s": 16,
+   "e": 42,
+   "en": [
+    "Script",
+    "I write the words and the shape of the story, then cut whatever does not earn its place."
+   ],
+   "ar": [
+    "النص",
+    "أكتب الكلمات وبنية القصة، ثم أحذف كل ما لا يستحق مكانه."
+   ]
+  },
+  {
+   "s": 36,
+   "e": 62,
+   "en": [
+    "Voiceover",
+    "The voice sets the rhythm. I record or direct it before any shot is final."
+   ],
+   "ar": [
+    "التعليق الصوتي",
+    "الصوت يضبط الإيقاع. أسجله أو أخرجه قبل أن يُعتمد أي مشهد."
+   ]
+  },
+  {
+   "s": 46,
+   "e": 80,
+   "en": [
+    "AI",
+    "Images and motion generated and guided to serve the story, never the other way around."
+   ],
+   "ar": [
+    "الذكاء الاصطناعي",
+    "صور وحركة أولّدها وأوجّهها لتخدم القصة، لا العكس."
+   ]
+  },
+  {
+   "s": 64,
+   "e": 100,
+   "en": [
+    "Editing",
+    "Timing, sound, colour and motion graphics come together. This is where the soul gets in."
+   ],
+   "ar": [
+    "المونتاج",
+    "التوقيت والصوت واللون والموشن غرافيك تجتمع هنا. هنا تدخل الروح."
+   ]
+  }
+ ],
+ "text": {
+  "en": {
+   "brand": "Khalil Samour",
+   "nav_work": "Work",
+   "nav_process": "Process",
+   "nav_about": "About",
+   "nav_contact": "Contact",
+   "hero_eyebrow": "Video editor · Storyteller",
+   "name1": "Khalil",
+   "name2": "Samour",
+   "hero_tag": "I create videos that have *soul*.",
+   "cta1": "See the work",
+   "cta2": "Let's talk",
+   "work_h": "Library",
+   "work_p": "Four ways of telling a story. Pick one, or watch them all.",
+   "all": "All",
+   "sample": "Sample",
+   "watch": "Watch",
+   "soon": "Video link goes here",
+   "close": "Close",
+   "proc_eyebrow": "Creative direction",
+   "proc_h": "From a blank page to the final cut.",
+   "proc_p": "Some projects are mine from the first idea to the last frame. Move along the timeline to see each track at work.",
+   "about_eyebrow": "About",
+   "about_h": "I edit to tell stories.",
+   "about_p1": "A story can reach me as a script, a sketch or a single sentence. I shape it with motion graphics, AI, voice and the cut until it feels alive.",
+   "contact_eyebrow": "Contact",
+   "contact_h": "Let's make something that feels alive.",
+   "copy": "Copy",
+   "copied": "Copied",
+   "foot": "© 2026 Khalil Samour",
+   "top": "Back to top",
+   "langBtn": "العربية",
+   "tlLabel": "Project timeline",
+   "skills": [
+    [
+     "Motion graphics",
+     "Animation"
+    ],
+    [
+     "Pure AI films",
+     "Generation"
+    ],
+    [
+     "AI with motion and editing",
+     "Hybrid"
+    ],
+    [
+     "Idea to delivery",
+     "Direction"
+    ]
+   ]
+  },
+  "ar": {
+   "brand": "خليل سمعور",
+   "nav_work": "الأعمال",
+   "nav_process": "العملية",
+   "nav_about": "نبذة",
+   "nav_contact": "تواصل",
+   "hero_eyebrow": "محرر فيديو · راوي قصص",
+   "name1": "خليل",
+   "name2": "سمعور",
+   "hero_tag": "أصنع فيديوهات لها *روح*.",
+   "cta1": "شاهد الأعمال",
+   "cta2": "لنتحدث",
+   "work_h": "المكتبة",
+   "work_p": "أربع طرق لرواية القصة. اختر واحدة أو شاهدها كلها.",
+   "all": "الكل",
+   "sample": "نموذج",
+   "watch": "شاهد",
+   "soon": "رابط الفيديو سيوضع هنا",
+   "close": "إغلاق",
+   "proc_eyebrow": "الإخراج الإبداعي",
+   "proc_h": "من الصفحة البيضاء إلى المونتاج النهائي.",
+   "proc_p": "بعض المشاريع أصنعها من الفكرة الأولى حتى الإطار الأخير. حرّك المؤشر على الخط الزمني لترى كل مسار وهو يعمل.",
+   "about_eyebrow": "نبذة",
+   "about_h": "أُحرّر لأروي القصص.",
+   "about_p1": "قد تصلني القصة كنص أو رسم أو جملة واحدة. أصوغها بالموشن غرافيك والذكاء الاصطناعي والصوت والمونتاج حتى تنبض بالحياة.",
+   "contact_eyebrow": "تواصل",
+   "contact_h": "لنصنع شيئًا ينبض بالحياة.",
+   "copy": "نسخ",
+   "copied": "تم النسخ",
+   "foot": "© 2026 خليل سمعور",
+   "top": "للأعلى",
+   "langBtn": "English",
+   "tlLabel": "الخط الزمني للمشروع",
+   "skills": [
+    [
+     "موشن غرافيك",
+     "رسوم متحركة"
+    ],
+    [
+     "أفلام ذكاء اصطناعي خالص",
+     "توليد"
+    ],
+    [
+     "ذكاء اصطناعي مع موشن ومونتاج",
+     "مزيج"
+    ],
+    [
+     "من الفكرة إلى التسليم",
+     "إخراج"
+    ]
+   ]
+  }
+ },
+ "images": {
+  "hero": "images/hero.jpg",
+  "about": "images/about.jpg",
+  "contact": "images/contact.jpg"
+ },
+ "updated": 0
+}
