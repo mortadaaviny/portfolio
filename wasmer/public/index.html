@@ -881,13 +881,23 @@ function art(cv, cat, seed){
   }
   var v=c.createRadialGradient(w/2,h/2,h*.35,w/2,h/2,w*.75); v.addColorStop(0,"rgba(0,0,0,0)"); v.addColorStop(1,"rgba(0,0,0,.55)"); c.fillStyle=v; c.fillRect(0,0,w,h);
 }
-/* a project's own thumbnail if it has one, otherwise generated artwork */
+function youTubeId(u){
+  var m=String(u||"").match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?[^#]*\bv=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m?m[1]:null;
+}
+function drawCover(cv,url,cat,seed){
+  var c=cv.getContext("2d"); c.fillStyle="#130f0b"; c.fillRect(0,0,cv.width,cv.height);
+  var im=new Image(); im.crossOrigin="anonymous";
+  im.onload=function(){ var s=Math.max(cv.width/im.width,cv.height/im.height),dw=im.width*s,dh=im.height*s; c.drawImage(im,(cv.width-dw)/2,(cv.height-dh)/2,dw,dh); };
+  im.onerror=function(){ art(cv,cat,seed); };
+  im.src=url;
+}
+/* a project's own thumbnail if it has one, else its YouTube cover, else generated artwork */
 function thumbArt(cv, p, seed){
-  if(p.thumb){
-    var c=cv.getContext("2d"); c.fillStyle="#130f0b"; c.fillRect(0,0,cv.width,cv.height);
-    var im=new Image(); im.onload=function(){ var s=Math.max(cv.width/im.width,cv.height/im.height),dw=im.width*s,dh=im.height*s; c.drawImage(im,(cv.width-dw)/2,(cv.height-dh)/2,dw,dh); };
-    im.src=p.thumb;
-  } else art(cv,p.cat,seed);
+  var yid=!p.thumb&&youTubeId(p.url);
+  if(p.thumb) drawCover(cv,p.thumb,p.cat,seed);
+  else if(yid) drawCover(cv,"https://img.youtube.com/vi/"+yid+"/hqdefault.jpg",p.cat,seed);
+  else art(cv,p.cat,seed);
 }
 
 var C, T, CATS, PHASES, PROJECTS, SITE, WIP;
@@ -898,7 +908,7 @@ function L(o){ return o[lang]; }
 /* ---------- library ---------- */
 function drawChips(){
   var box=$("#chips"); box.innerHTML="";
-  ["all","motion","ai","aimotion","creative"].forEach(function(k){
+  ["all","creative","motion","ai","aimotion"].forEach(function(k){
     var n = k==="all" ? PROJECTS.length : PROJECTS.filter(function(p){return p.cat===k;}).length;
     var b=document.createElement("button"); b.type="button"; b.className="chip"; b.setAttribute("aria-pressed", String(filter===k));
     b.innerHTML=esc(k==="all"?T[lang].all:CATS[k][lang])+"<sup>"+n+"</sup>";
@@ -955,10 +965,6 @@ function drawWip(){
   }
 }
 var opener=null, openIdx=-1;
-function youTubeId(u){
-  var m=String(u||"").match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?[^#]*\bv=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-  return m?m[1]:null;
-}
 function fillModal(){
   var p=PROJECTS[openIdx]; if(!p) return;
   $("#ov-cat").textContent=CATS[p.cat][lang]; $("#ov-title").textContent=L(p)[0]; $("#ov-desc").textContent=L(p)[1];
@@ -1110,7 +1116,7 @@ var GROUPS=[
  ["About",[["about_eyebrow","Small label"],["about_h","Title"],["about_p1","Paragraph","area"]]],
  ["Contact & footer",[["contact_eyebrow","Small label"],["contact_h","Title"],["foot","Footer text"],["top","Back to top link"]]]
 ];
-var CATKEYS=["motion","ai","aimotion","creative"];
+var CATKEYS=["creative","motion","ai","aimotion"];
 var IMGS=[["hero","Hero photo","Wide photo with space on the left for your name."],["about","About photo","Shown as a portrait crop. Keep your face near the middle."],["contact","Contact background","A dark, moody photo works best."]];
 
 function getP(o,p){ return p.split(".").reduce(function(a,k){ return a==null?a:a[k]; },o); }
@@ -1154,7 +1160,7 @@ function vProjectEdit(i){
    +'<div class="grid2">'+input(b+".en.0","Title (English)")+input(b+".ar.0","Title (Arabic)",{rtl:1})+'</div>'
    +'<div class="grid2">'+input(b+".en.1","Description (English)",{area:1})+input(b+".ar.1","Description (Arabic)",{area:1,rtl:1})+'</div>'
    +input(b+".url","Video link",{type:"url",ph:"https://youtu.be/…",hint:"YouTube, Vimeo, Drive or any page with the video. It opens in a new tab."})
-   +'<div class="field"><label>Thumbnail</label><div class="thumbbox"><canvas width="480" height="270" id="editThumb"></canvas><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Upload image<input type="file" accept="image/*" data-up="thumb" data-id="'+p.id+'" hidden></label>'+(p.thumb?'<button class="btn sm" type="button" data-act="thumbclear" data-id="'+p.id+'">Use generated art</button>':'')+'</div></div><p class="hint">Optional. Without one, a generated frame is used.</p></div>'
+   +'<div class="field"><label>Thumbnail</label><div class="thumbbox"><canvas width="480" height="270" id="editThumb"></canvas><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Upload image<input type="file" accept="image/*" data-up="thumb" data-id="'+p.id+'" hidden></label>'+(p.thumb?'<button class="btn sm" type="button" data-act="thumbclear" data-id="'+p.id+'">Remove</button>':'')+'</div></div><p class="hint">Optional. Without one, the video\'s own YouTube cover is used when there\'s a link, otherwise a generated frame.</p></div>'
    +'<label class="chk"><input type="checkbox" data-p="'+b+'.sample" data-t="bool"'+(p.sample?' checked':'')+'> Show the "Sample" badge on this project</label></div>';
 }
 function vWip(){
