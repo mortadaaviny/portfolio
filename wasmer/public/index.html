@@ -908,11 +908,11 @@ function L(o){ return o[lang]; }
 /* ---------- library ---------- */
 function drawChips(){
   var box=$("#chips"); box.innerHTML="";
-  ["all","creative","motion","ai","aimotion"].forEach(function(k){
-    var n = k==="all" ? PROJECTS.length : PROJECTS.filter(function(p){return p.cat===k;}).length;
+  ["creative","motion","ai","aimotion"].forEach(function(k){
+    var n = PROJECTS.filter(function(p){return p.cat===k;}).length;
     var b=document.createElement("button"); b.type="button"; b.className="chip"; b.setAttribute("aria-pressed", String(filter===k));
-    b.innerHTML=esc(k==="all"?T[lang].all:CATS[k][lang])+"<sup>"+n+"</sup>";
-    b.onclick=function(){ filter=k; drawChips(); drawGrid(); };
+    b.innerHTML=esc(CATS[k][lang])+"<sup>"+n+"</sup>";
+    b.onclick=function(){ filter=(filter===k)?"all":k; drawChips(); drawGrid(); };
     box.appendChild(b);
   });
 }
