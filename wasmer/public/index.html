@@ -1107,7 +1107,7 @@ var host=document.getElementById("admov"), root=host.shadowRoot||host.attachShad
 root.innerHTML=ADM_HTML;
 var $=function(s){return root.querySelector(s);};
 var meta={server:false,hasPassword:false}, pw="", authed=false, S=null, pub=null, pubJSON="", base=0, tab="projects", editId=null, wipEdit=null, sureDel=null, saveTimer=0, storageFull=false;
-var TABS=[["projects","Projects"],["wip","Working On"],["text","Text"],["timeline","Process"],["images","Photos"],["contact","Contact"],["backup","Backup"]];
+var TABS=[["projects","Projects"],["categories","Categories"],["wip","Working On"],["text","Text"],["timeline","Process"],["images","Photos"],["contact","Contact"],["backup","Backup"]];
 var GROUPS=[
  ["Header & hero",[["brand","Header name"],["hero_eyebrow","Small label above name"],["name1","First name"],["name2","Last name"],["hero_tag","Tagline (put *stars* around the accent word)"],["cta1","Hero button 1"],["cta2","Hero button 2"]]],
  ["Menu",[["nav_work","Work"],["nav_process","Process"],["nav_about","About"],["nav_contact","Contact"]]],
@@ -1162,6 +1162,24 @@ function vProjectEdit(i){
    +input(b+".url","Video link",{type:"url",ph:"https://youtu.be/…",hint:"YouTube, Vimeo, Drive or any page with the video. It opens in a new tab."})
    +'<div class="field"><label>Thumbnail</label><div class="thumbbox"><canvas width="480" height="270" id="editThumb"></canvas><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Upload image<input type="file" accept="image/*" data-up="thumb" data-id="'+p.id+'" hidden></label>'+(p.thumb?'<button class="btn sm" type="button" data-act="thumbclear" data-id="'+p.id+'">Remove</button>':'')+'</div></div><p class="hint">Optional. Without one, the video\'s own YouTube cover is used when there\'s a link, otherwise a generated frame.</p></div>'
    +'<label class="chk"><input type="checkbox" data-p="'+b+'.sample" data-t="bool"'+(p.sample?' checked':'')+'> Show the "Sample" badge on this project</label></div>';
+}
+function vCategories(){
+  var h='<h2>Categories</h2><p class="sub">Rename a category, and set the order projects appear in when a visitor filters your library to it.</p>';
+  CATKEYS.forEach(function(k){
+    var list=[]; S.projects.forEach(function(p,i){ if(p.cat===k) list.push(i); });
+    h+='<h3>'+esc(S.cats[k].en)+'</h3><div class="card" style="margin-bottom:10px"><div class="grid2">'+input("cats."+k+".en","Name (English)")+input("cats."+k+".ar","Name (Arabic)",{rtl:1})+'</div></div>';
+    if(!list.length){ h+='<div class="empty" style="margin-bottom:28px">No projects in this category yet.</div>'; return; }
+    h+='<div class="plist" style="margin-bottom:28px">';
+    list.forEach(function(i,li){
+      var p=S.projects[i];
+      h+='<div class="prow"><canvas width="256" height="144" data-i="'+i+'"></canvas><div><div class="t">'+esc(p.en[0]||p.ar[0]||"Untitled")+'</div></div>'
+       +'<div class="acts"><button class="btn sm" type="button" data-act="catup" data-id="'+p.id+'" aria-label="Move up"'+(li===0?' disabled':'')+'>↑</button>'
+       +'<button class="btn sm" type="button" data-act="catdown" data-id="'+p.id+'" aria-label="Move down"'+(li===list.length-1?' disabled':'')+'>↓</button>'
+       +'<button class="btn sm" type="button" data-act="catedit" data-id="'+p.id+'">Edit</button></div></div>';
+    });
+    h+='</div>';
+  });
+  return h;
 }
 function vWip(){
   if(wipEdit!==null){ var i=S.inprogress.findIndex(function(w){return w.id===wipEdit;}); if(i<0){ wipEdit=null; return vWip(); } return vWipEdit(i); }
@@ -1239,7 +1257,7 @@ function vBackup(){
    +'<div class="card"><div class="row"><button class="btn" type="button" data-act="download">Download content.json</button><button class="btn" type="button" data-act="copyjson">Copy JSON</button></div><div class="msg" id="dlmsg"></div></div>'
    +'<h3>Restore</h3><div class="card"><div class="row"><label class="btn sm" style="margin:0;cursor:pointer">Import content.json<input type="file" accept="application/json,.json" data-up="import" hidden></label><button class="btn sm danger" type="button" data-act="discard"'+(d?'':' disabled')+'>Discard unsaved changes</button></div><p class="hint">Import replaces what you see here with a saved file. Press Save to keep it. Discard goes back to the last saved version.</p><div class="msg" id="rsmsg"></div></div>';
 }
-var VIEWS={projects:vProjects,wip:vWip,text:vText,timeline:vTimeline,images:vImages,contact:vContact,backup:vBackup};
+var VIEWS={projects:vProjects,categories:vCategories,wip:vWip,text:vText,timeline:vTimeline,images:vImages,contact:vContact,backup:vBackup};
 function render(){
   $("#saveBtn").disabled=!authed; $("#saveBtn").textContent=meta.server?"Save":"Save is off";
   $("#tabs").innerHTML=!authed?"":TABS.map(function(t){ return '<button class="tab" role="tab" type="button" data-tab="'+t[0]+'" aria-selected="'+(tab===t[0])+'">'+t[1]+'</button>'; }).join("");
@@ -1319,6 +1337,13 @@ $("#main").addEventListener("click",function(e){
   else if(a==="back"){ editId=null; render(); }
   else if(a==="del"){ if(sureDel===id){ S.projects.splice(ix(),1); sureDel=null; changed(); } else { sureDel=id; setTimeout(function(){ if(sureDel===id){ sureDel=null; if(tab==="projects"&&editId===null) render(); } },3500); } render(); }
   else if(a==="up"||a==="down"){ var j=ix(), t=a==="up"?j-1:j+1; if(t>=0&&t<S.projects.length){ var m=S.projects[j]; S.projects[j]=S.projects[t]; S.projects[t]=m; changed(); render(); } }
+  else if(a==="catup"||a==="catdown"){
+    var ci=ix(), cat=S.projects[ci].cat, dir=a==="catup"?-1:1, cj=ci+dir;
+    while(cj>=0&&cj<S.projects.length&&S.projects[cj].cat!==cat) cj+=dir;
+    if(cj>=0&&cj<S.projects.length){ var cm=S.projects[ci]; S.projects[ci]=S.projects[cj]; S.projects[cj]=cm; changed(); }
+    render();
+  }
+  else if(a==="catedit"){ tab="projects"; editId=id; render(); host.scrollTo(0,0); }
   else if(a==="thumbclear"){ S.projects[ix()].thumb=""; changed(); render(); }
   else if(a==="wipadd"){ var w={id:"w"+Date.now(),en:["New project",""],ar:["مشروع جديد",""],thumb:""}; S.inprogress.unshift(w); wipEdit=w.id; changed(); render(); host.scrollTo(0,0); }
   else if(a==="wipedit"){ wipEdit=id; render(); host.scrollTo(0,0); }
