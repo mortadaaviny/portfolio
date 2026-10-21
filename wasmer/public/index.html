@@ -234,6 +234,7 @@ footer a:hover{color:var(--fg)}
 /* Arabic: the hero text block stays on the left, over the dark side of the photo,
    and reads left-aligned there, like a caption set into the image. */
 html[dir="rtl"] .hero-copy{margin-right:auto;margin-left:0;text-align:left}
+html[dir="rtl"] .hero-copy .tag{margin-right:auto;margin-left:0}
 html[dir="rtl"] .hero-copy .cta{justify-content:flex-end}
 .admov{position:fixed;inset:0;z-index:100;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
 #boot{position:fixed;inset:0;z-index:200;background:var(--bg);display:grid;place-items:center;transition:opacity .4s ease}
@@ -1177,7 +1178,12 @@ function maybeFetchYtDur(p, force){
     var pr=S.projects.find(function(x){return x.id===p.id;});
     if(sec){ cur.status="done"; if(pr){ pr.dur=fmtDur(sec); changed(); } }
     else { cur.status="error"; }
-    render();
+    /* Patch just the duration field in place — a full render() here would blow away
+       whatever the admin is mid-typing elsewhere in this same form (title, description…),
+       stealing focus and dropping keystrokes. */
+    var el=$('input[data-ytdur-for="'+p.id+'"]');
+    if(el) el.value = sec?fmtDur(sec):"Could not read it automatically";
+    else render();
   });
 }
 var IMGS=[["hero","Hero photo","Wide photo with space on the left for your name."],["about","About photo","Shown as a portrait crop. Keep your face near the middle."],["contact","Contact background","A dark, moody photo works best."]];
@@ -1221,7 +1227,7 @@ function durField(p,b){
   var st=ytFetchState[p.id], stat=st&&st.vid===yid?st.status:"idle";
   var shown=stat==="loading"?"Reading from YouTube…":(p.dur||(stat==="error"?"Could not read it automatically":""));
   return '<div class="field"><label>Duration</label><div class="row" style="gap:10px;align-items:center">'
-   +'<input type="text" value="'+esc(shown)+'" readonly style="opacity:.85;flex:1 1 auto">'
+   +'<input type="text" value="'+esc(shown)+'" readonly data-ytdur-for="'+p.id+'" style="opacity:.85;flex:1 1 auto">'
    +'<button class="btn sm" type="button" data-act="ytdur" data-id="'+p.id+'">Refresh</button></div>'
    +'<p class="hint">Read automatically from YouTube — a typed duration is ignored for YouTube links.</p></div>';
 }
